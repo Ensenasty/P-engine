@@ -1,7 +1,7 @@
 
 ANYSRC != find . -type f | grep -v git
 SERVICE_ACCOUNT = 356720520556-compute@developer.gserviceaccount.com
-PROJ    =  p_engine
+PROJ    =  p-engine
 SCOPES  = https://www.googleapis.com/auth/devstorage.read_only,
 SCOPES += https://www.googleapis.com/auth/logging.write,
 SCOPES += https://www.googleapis.com/auth/monitoring.write,
@@ -30,8 +30,7 @@ stop: NAME=$(PROJ)
 stop: stop
 
 deploy: NAME=$(PROJ)
-deploy:
-deploy:
+deploy: run
 
 del:
 	gcloud compute instances delete $(NAME) --zone=us-west2-a

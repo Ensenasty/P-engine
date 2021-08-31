@@ -1,9 +1,9 @@
 bs4>=0.0.1
 fire>=0.4.0
-flask
+Flask==2.0.1
 google-cloud-error-reporting
 google-cloud-logging
 requests>=2.25.1
 soupsieve>=2.2.1
-waitress
+gunicorn==20.1.0
 youtube-dl>=2021.4.17

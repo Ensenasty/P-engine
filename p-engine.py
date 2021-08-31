@@ -43,13 +43,12 @@ def direct_vid_link(query):
 
 
 if __name__ == "__main__":
+    import os
     import sys
-    import waitress
 
-    # import webbrowser
     PORT = sys.argv[1] if len(sys.argv) > 1 else "6969"
-    # webbrowser.open('http://127.0.0.1:' + PORT)
-    waitress.serve(app, port=PORT, threads=8)
+
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
 
 
 #  vim: set ft=python sw=4 tw=0 fdm=manual et :
