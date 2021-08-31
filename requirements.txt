@@ -1,0 +1,7 @@
+bs4>=0.0.1
+fire>=0.4.0
+requests>=2.25.1
+soupsieve>=2.2.1
+youtube-dl>=2021.4.17
+google-cloud-logging
+google-cloud-error-reporting
