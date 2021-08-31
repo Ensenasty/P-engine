@@ -22,39 +22,12 @@ import fire
 from requests import post
 from requests.exceptions import RequestException
 from bs4 import BeautifulSoup
-
-from google.cloud.logging.handlers import setup_logging
-
-client = google.cloud.logging.Client()
-handler = CloudLoggingHandler(client)
-logging.getLogger().setLevel(logging.DEBUG)  # defaults to WARN
-logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    level=loggng.INFO
-)
-cloudlogs = setup_logging(handler)
-
-from logzero import setup_logger
-log = setup_logger(name=cloudlogs, logfile=None,isRootLogger=True,
-                           json=True, json_esure_ascii=True)
-log.warning("Native Cloud Logging now enabled.")
-
-import sys
-from google.cloud import error_reporting
-
-erc = error_reporting.Client(project="mezaops", service="bingporn",
-                            version="0")
-
-
-def custom_excepthook(exctype, value, traceback):
-    user = "ay@no-ma.me"
-    errstr = exctype.str()
-    erc.report()
-    sys.__excepthook__(exctype, value, traceback)
+from logzero import logger as log
 
 
 class PornError(Exception):
-    """ shit! no porn! """
+    """shit! no porn!"""
+
     ...
 
 
@@ -85,6 +58,7 @@ class BingPorn:
             }
         )
         self._link = ""
+        self._link_list = ""
         self._url = ""
 
     def _url_generator(self):

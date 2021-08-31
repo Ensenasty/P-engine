@@ -9,3 +9,4 @@ Dockerfile
 README.md
 __pycache__
 cloudbuild.yaml
+.ropeproject

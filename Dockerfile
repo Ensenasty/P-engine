@@ -4,8 +4,6 @@ ENV PYTHHONBUFFERED True
 ENV DEBIAN_FRONTEND=noninteractive
 ENV APP_HOME /app
 
-RUN apt update && apt -yq upgrade && apt-get -yq install gettext build-essential
-
 WORKDIR $APP_HOME
 COPY . ./
 RUN pip install --no-cache-dir  -r requirements.txt

@@ -9,6 +9,9 @@ SCOPES += https://www.googleapis.com/auth/servicecontrol,
 SCOPES += https://www.googleapis.com/auth/service.management.readonly,
 SCOPES += https://www.googleapis.com/auth/trace.append
 
+IMAGE = gcr.io/mezaops/$(PROJ):latest
+REGION =  us-west2
+
 PHONY: build default deltest stop test deploy del stop run
 
 default:: build
@@ -17,7 +20,7 @@ default:: deploy
 build: .build
 
 .build: $(ANYSRC)
-	gcloud builds submit --config cloudbuild.yaml
+	gcloud builds submit --tag $(IMAGE)
 	touch $@
 
 deltest: NAME=$(PROJ)test
@@ -38,7 +41,18 @@ del:
 stop:
 	gcloud compute instances stop $(NAME) --zone=us-west2-a
 
-run: .build
+run:
+	gcloud run deploy $(NAME) \
+  --image $(IMAGE) \
+  --region $(REGION) \
+  --allow-unauthenticated
+:wq
+
+
+
+
+
+oldrun: .build
 	gcloud beta compute --project=mezaops instances \
     create-with-container $(NAME) --zone=us-west2-a \
     --machine-type=e2-micro --subnet=default \
