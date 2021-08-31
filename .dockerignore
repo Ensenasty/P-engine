@@ -1,0 +1,5 @@
+.build
+.git
+cloudbuild.yaml
+.venv
+__pycache__
