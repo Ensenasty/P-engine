@@ -1,7 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Porn Matrix</title>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async
+          src="https://www.googletagmanager.com/gtag/js?id=UA-96912056-7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'UA-96912056-7');
+    </script>
+
+<title>P-engine Nasty Videos</title>
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/solid.css" integrity="sha384-+0VIRx+yz1WBcCTXBkVQYIBVNEFH1eP6Zknm16roZCyeNg2maWEpk/l/KsyFKs7G" crossorigin="anonymous">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/fontawesome.css" integrity="sha384-jLuaxTTBR42U2qJ/pm4JRouHkEDHkVqH0T1nyQXn1mZ7Snycpf6Rl25VBNthU4z0" crossorigin="anonymous">
@@ -76,7 +87,7 @@ button {
     -webkit-appearance: none;
     width: 15vmin;
     height: .5vmin;
-    border-radius: .5vmin;   
+    border-radius: .5vmin;
     background: #white;
     outline: none;
     position: fixed;
@@ -89,7 +100,7 @@ button {
     appearance: none;
     width: 2vmin;
     height: 2vmin;
-    border-radius: 50%; 
+    border-radius: 50%;
     background: white;
     cursor: pointer;
     box-shadow: -1px 1px black;}
@@ -106,29 +117,30 @@ button {
     <div id="help">
         <pre>
 
-    <a href="https://paypal.me/deracoslon">donate if you enjoy my work</a> :)
-    Try multiple monitors or a phone
-  
-  Hotkeys:
-    F11 = fullscreen
+    Prueba esta herramienta en tu cel o usando varios monitores.
 
-    m = toggle mute
-    h = toggle help
-    c = toggle controls
-    +/- = adjust volume 5%
-    
-    left arrow = go back 30s
-    right arrow = go forward 30s
-    down arrow = move to beginning
-    up arrow = move to end
-    p or pause = toggle pause/play
-    
-    enter = toggle search
-    r = load search results for all videos
-    1-9 = load search results in one
+  Hotkeys:
+    F11 = pantalla completa
+
+    m    = mute encendido/aoagado
+    h    = ayuda
+    c    = controles encendido/apagado
+    +/-  = vol
+
+    flechas
+    izquierda  = retroceder 30s
+    derecha    = avanzar 30s
+    abajo      = ir al principio del video
+    arriba     = ir al final del video
+
+    p = pausa / continuar
+
+    enter  = busqueda
+    r      = cargar el resultado de la busquedaa en todos los reproductores
+    1-9    = cargar el resultado de la busqueda solo en uno
         </pre>
     </div>
-    <input type="text" id="search_box" size="20" placeholder="search term">
+    <input type="text" id="search_box" size="20" placeholder="que buscas?">
     <div id="controls">
         <input type="range" min="0" max="1" value="1" step=".01" class="slider" id="volume">
         <div id="main_buttons">
@@ -159,4 +171,4 @@ button {
 </script>
 <script src="/static/control.js"></script>
 </body>
-</html>
+</html
