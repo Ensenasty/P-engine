@@ -21,6 +21,12 @@ from cachetools import cached, LRUCache
 from requests import post
 from requests.exceptions import RequestException
 from bs4 import BeautifulSoup
+from logzero import logger as log
+import logzero
+
+ytdllog = logzero.setup_logger(
+    name="ytdllog", level=logzero.INFO, disableStderrLogger=True
+)
 
 
 # Blacklisted sites, these sites "work" with youtube_dl, but don't work for us
@@ -34,6 +40,7 @@ ydl = youtube_dl.YoutubeDL(
         "quiet": True,
         "no_warnings": True,
         "noplaylist": True,
+        "logger": ytdllog(),
     }
 )
 
