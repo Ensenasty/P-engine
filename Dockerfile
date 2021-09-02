@@ -1,7 +1,8 @@
-FROM python:3.9-slim
+FROM python:3.9-alpine
+LABEL "club.ensenasty.p-engine.mamtaomer"="dev@ensenasty.club"
+LABEL "club.ensenasty.p-engine.version"="0.1"
 
 ENV PYTHHONBUFFERED True
-ENV DEBIAN_FRONTEND=noninteractive
 ENV APP_HOME /app
 
 WORKDIR $APP_HOME
