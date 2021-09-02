@@ -13,7 +13,7 @@ gcloud run deploy $(NAME) \
   --allow-unauthenticated
 endef
 
-PHONY: build init deploy run
+PHONY: build init deploy run clean
 
 default:: build
 default:: deploy
@@ -27,6 +27,12 @@ deploy: NAME=$(SERVICE)
 deploy: run
 
 run: deploy
+
+rebuild:: clean
+rebuild:: default
+
+clean:
+	rm -rf .build .init __pycache__
 
 .build: $(ANYSRC)
 	gcloud builds submit --tag $(SRV_IMAGE)
