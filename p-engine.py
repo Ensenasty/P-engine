@@ -10,15 +10,15 @@ app.jinja_env.lstrip_blocks = True
 
 @app.route("/")
 def main_page():
-    cols = int(request.args.get("cols", default=2))
-    rows = int(request.args.get("rows", default=2))
+    # cols = int(request.args.get("cols", default=2))
+    # rows = int(request.args.get("rows", default=2))
     results = int(request.args.get("results", default=105))
     length = int(request.args.get("length", default=20))
     search = request.args.get("search", default="default")
     return render_template(
         "vid_grid.html",
-        cols=cols,
-        rows=rows,
+        cols=2,
+        rows=2,
         results=results,
         length=length,
         search=search,

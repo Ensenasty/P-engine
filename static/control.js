@@ -371,7 +371,7 @@ if (is_touch_device()) {
     main_buttons = document.getElementById("main_buttons");
     main_buttons.appendChild(btn);
     fullscreen = false;
-    
+
     btn.addEventListener("click", function () {
         if (fullscreen) {
             fullscreen = false;
