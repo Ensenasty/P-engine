@@ -1,12 +1,13 @@
-FROM python:3-buster
+FROM python:3.9-alpine
+LABEL "club.ensenasty.p-engine.mamtaomer"="dev@ensenasty.club"
+LABEL "club.ensenasty.p-engine.version"="0.1"
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt -yq upgrade && apt-get -yq install gettext build-essential
+ENV PYTHHONBUFFERED True
+ENV APP_HOME /app
 
-WORKDIR /app/
-COPY requirements.txt .
-RUN pip install -r requirements.txt
+WORKDIR $APP_HOME
+COPY . ./
+RUN pip install --no-cache-dir  -r requirements.txt
 
-COPY . .
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 p-engine:app
 
-ENTRYPOINT python3 ./bot.py

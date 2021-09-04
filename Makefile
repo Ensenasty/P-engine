@@ -1,58 +1,53 @@
 
-ANYSRC != find . -type f | grep -v git
-SERVICE_ACCOUNT = 356720520556-compute@developer.gserviceaccount.com
-PROJ    =  p_engine
-SCOPES  = https://www.googleapis.com/auth/devstorage.read_only,
-SCOPES += https://www.googleapis.com/auth/logging.write,
-SCOPES += https://www.googleapis.com/auth/monitoring.write,
-SCOPES += https://www.googleapis.com/auth/servicecontrol,
-SCOPES += https://www.googleapis.com/auth/service.management.readonly,
-SCOPES += https://www.googleapis.com/auth/trace.append
+ANYSRC   != find . -type f | grep -v git | grep -v .rope
+FIRSTDEPLOY  = cat .init
+SRV_IMAGE = gcr.io/mezaops/$(SERVICE):latest
+SERVICE   = p-engine
+PROJECT   = $(PROJ)
+REGION    = us-west1
 
-PHONY: build default deltest stop test deploy del stop run
+define DEPLOY_CMD
+gcloud run deploy $(NAME) \
+  --image $(SRV_IMAGE) \
+  --region $(REGION) \
+  --allow-unauthenticated
+endef
+
+PHONY: build init deploy run clean
 
 default:: build
 default:: deploy
 
 build: .build
 
+init: NAME=$(SERVICE)
+init: .build
+
+deploy: NAME=$(SERVICE)
+deploy: run
+
+run: deploy
+
+rebuild:: clean
+rebuild:: default
+
+clean:
+	rm -rf .build .init __pycache__
+
 .build: $(ANYSRC)
-	gcloud builds submit --config cloudbuild.yaml
+	gcloud builds submit --tag $(SRV_IMAGE)
 	touch $@
 
-deltest: NAME=$(PROJ)test
-deltest: del
+.init:
+	@$(DEPLOY_CMD) \
+  --no-allow-unauthenticated \
+  --memory=512Mi \
+  --no-use-http2 \
+  --platform=managed \
+  --project=$(PROJECT)
+	echo 1 > $@
 
-test: NAME=$(PROJ)test
-test: run
-
-stop: NAME=$(PROJ)
-stop: stop
-
-deploy: NAME=$(PROJ)
-deploy:
-deploy:
-
-del:
-	gcloud compute instances delete $(NAME) --zone=us-west2-a
-
-stop:
-	gcloud compute instances stop $(NAME) --zone=us-west2-a
-
-run: .build
-	gcloud beta compute --project=mezaops instances \
-    create-with-container $(NAME) --zone=us-west2-a \
-    --machine-type=e2-micro --subnet=default \
-    --network-tier=STANDARD --metadata=google-logging-enabled=true \
-    --maintenance-policy=MIGRATE \
-    --service-account=$(SERVICE_ACCOUNT) \
-    --tags=http-server,https-server --image=cos-stable-89-16108-470-16 \
-    --image-project=cos-cloud --boot-disk-size=10GB --boot-disk-type=pd-balanced \
-    --boot-disk-device-name=$(NAME) --no-shielded-secure-boot --shielded-vtpm  \
-    --shielded-integrity-monitoring \
-    --container-image=us-west2-docker.pkg.dev/mezaops/-$(PROJ)/$(PROJ)-image:tag1 \
-    --container-restart-policy=always --container-tty \
-    --labels=container-vm=cos-stable-89-16108-470-16
-#
+run:
+	$(DEPLOY_CMD)
 
 %:

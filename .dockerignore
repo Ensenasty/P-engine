@@ -1,5 +1,12 @@
+*.pyc
+*.pyd
+*.pyo
 .build
 .git
-cloudbuild.yaml
+.pytest_cache
 .venv
+Dockerfile
+README.md
 __pycache__
+cloudbuild.yaml
+.ropeproject
