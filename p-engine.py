@@ -1,8 +1,7 @@
 from os import path
 from flask import Flask, send_from_directory, render_template, request
 
-from logzero import setup_logger
-from generator import get_direct_link
+from generator import searchPorn
 
 app = Flask(__name__)
 app.jinja_env.trim_blocks = True
@@ -36,12 +35,16 @@ def favicon():
 
 
 @app.route("/search/<query>")
-def direct_vid_link(query):
+def search_query(query):
     results = int(request.args.get("results", default=105))
     length = int(request.args.get("length", default=20))
 
+    urls = searchPorn(query, results=results, length=length)
+
     def stream():
-        return get_direct_link(query, results=results, length=length)
+        return next(urls)
+
+    #  [print(u) for u in urls]
 
     return app.response_class(stream(), mimetype="text/plain")
 
@@ -50,5 +53,4 @@ if __name__ == "__main__":
     import os
 
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
-    app.run(
 #  vim: set ft=python sw=4 tw=0 fdm=manual et :

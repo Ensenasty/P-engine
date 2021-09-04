@@ -1,17 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
- _     _
-# | |__ (_)_ __   __ _ _ __   ___  _ __ _ __
-# | '_ \| | '_ \ / _` | '_ \ / _ \| '__| '_ \
-# | |_) | | | | | (_| | |_) | (_) | |  | | | |
-# |_.__/|_|_| |_|\__, | .__/ \___/|_|  |_| |_|
-#                |___/|_|
 ay@no-ma..me 20201125 073526 -0800 PST 1606318526 d(-_- )b...
 
 """
 from contextlib import closing
-import sys
 import random
 import json
 import time
@@ -27,7 +20,6 @@ import logzero
 ytdllog = logzero.setup_logger(
     name="ytdllog", level=logzero.INFO, disableStderrLogger=True
 )
-
 
 # Blacklisted sites, these sites "work" with youtube_dl, but don't work for us
 blacklist = [
@@ -46,7 +38,7 @@ blacklist = [
 ]
 
 
-class MyLogger(object):
+class MyLogger:
     def debug(self, msg):
         ytdllog.debug(msg)
 
@@ -54,10 +46,9 @@ class MyLogger(object):
         ytdllog.warning(msg)
 
     def error(self, msg):
-        log.error(msg)
+        ytdllog.error(msg)
 
 
-# initialize ydl
 ydl = youtube_dl.YoutubeDL(
     {
         "format": "([protocol=https]/[protocol=http])[ext=mp4]",
@@ -66,42 +57,14 @@ ydl = youtube_dl.YoutubeDL(
         "no_warnings": True,
         "noplaylist": True,
         "sleep-interval": 1,
-        "max-sleeo-interval": 5,
+        "max-sleep-interval": 5,
         "user-agent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36,gzip(gfe)",
         "logger": MyLogger(),
     }
 )
 
 
-class PornException(Exception):
-    """shit! no porn!"""
-
-    ...
-
-
-def url_generator(linklist):
-    """
-    Generator object thatWill spit out valid urls on stdout that you
-    can have mpd or vlc swallow
-
-    Args:
-        linklist (List): Its a list. of links. what did you expect?
-    Yields:
-        stream (Generator) A generator for spewing filthy urls all over
-    """
-    for link in linklist:
-        try:
-            stream = getstream(link)
-            if stream:
-                yield stream
-            else:
-                continue
-        except PornException:
-            ...
-        #  sys.stderr.writeline(err)
-
-
-def get_direct_link(search, results=105, length=0):
+def searchPorn(search, results=105, length=20):
     """See pore porn, see no ads, usin the best search porn enine, Bing!"""
 
     length_param = ""
@@ -122,14 +85,20 @@ def get_direct_link(search, results=105, length=0):
 
     # Extract links to video pages from search results
     narrowed_html = html.find_all(class_="vrhdata")
-    link_list = []
-    for n_html in narrowed_html:
-        link_list.append(json.loads(n_html["vrhm"])["pgurl"])
+
+    link_list = [json.loads(n_html["vrhm"])["pgurl"] for n_html in narrowed_html]
 
     random.shuffle(link_list)
-    #    log.info("link_list: %s ", link_list)
 
-    return url_generator(link_list[0:5])
+    def url_generator(linklist):
+        for link in linklist:
+            stream = getstream(link)
+            if stream:
+                yield stream
+            else:
+                continue
+
+    return url_generator(link_list)
 
 
 # Boilerplate requests stuff
@@ -143,18 +112,22 @@ def simple_get(url):
                 return resp.content
             return None
     except RequestException as err:
+        log.eror(err)
         return None
 
 
 @cached(cache=LRUCache(maxsize=1024))
 def getstream(link):
     try:
-        log.info("sleeping 5")
-        time.sleep(5)
-        return ydl.extract_info(link, download=False).get("url", None)
+        time.sleep(1)
+        vidurl = ydl.extract_info(link, download=False).get("url", None)
+        return vidurl
     except AttributeError:
         ...
 
 
 if __name__ == "__main__":
     ...
+
+
+#  vim: set ft=python sw=4 tw=0 fdm=manual et :
