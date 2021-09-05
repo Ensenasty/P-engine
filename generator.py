@@ -17,25 +17,11 @@ from bs4 import BeautifulSoup
 from logzero import logger as log
 import logzero
 
+logzero.json()
+
 ytdllog = logzero.setup_logger(
     name="ytdllog", level=logzero.INFO, disableStderrLogger=True
 )
-
-# Blacklisted sites, these sites "work" with youtube_dl, but don't work for us
-blacklist = [
-    "porndig.com",
-    "dailymotion.com",
-    "facebook.com",
-    "rexxx.org",
-    "xxxbunker.com",
-    "tukif.com",
-    "txxx.com",
-    "instagram.com",
-    "spankbang.com",
-    "tiktok.com",
-    "vimeo.com",
-    "youtube.com",
-]
 
 
 class MyLogger:
@@ -46,22 +32,38 @@ class MyLogger:
         ytdllog.warning(msg)
 
     def error(self, msg):
-        ytdllog.error(msg)
+        log.error(msg)
 
 
-ydl = youtube_dl.YoutubeDL(
-    {
-        "format": "([protocol=https]/[protocol=http])[ext=mp4]",
-        "ignoreerrors": True,
-        "quiet": True,
-        "no_warnings": True,
-        "noplaylist": True,
-        "sleep-interval": 1,
-        "max-sleep-interval": 5,
-        "user-agent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36,gzip(gfe)",
-        "logger": MyLogger(),
-    }
-)
+# Blacklisted sites, these sites "work" with youtube_dl, but don't work for us
+blacklist = [
+    "dailymotion.com",
+    "facebook.com",
+    "instagram.com",
+    "microsoft.com",
+    "porndig.com",
+    "rexxx.org",
+    "spankbang.com",
+    "tiktok.com",
+    "tukif.com",
+    "txxx.com",
+    "vimeo.com",
+    "xhamster.com",
+    "xxxbunker.com",
+    "youtube.com",
+]
+
+ydl_opts = {
+    "format": "([protocol=https]/[protocol=http])[ext=mp4]",
+    "ignoreerrors": True,
+    "quiet": True,
+    "no_warnings": True,
+    "noplaylist": True,
+    "sleep-interval": 1,
+    "max-sleep-interval": 5,
+    "user-agent": "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36,gzip(gfe)",
+    "logger": MyLogger(),
+}
 
 
 def searchPorn(search, results=105, length=20):
@@ -76,16 +78,12 @@ def searchPorn(search, results=105, length=20):
     srch += '?q="{}" AND NOT (site:{})'
     srch += "&async=content"
     srch += "&first=0&count={}&qft={}"
+
     blklst = " OR site:".join(blacklist)
 
     search_url = srch.format(search.lower(), blklst, results, length_param)
-
-    # get request for search page, create parser
     html = BeautifulSoup(simple_get(search_url), "html.parser")
-
-    # Extract links to video pages from search results
     narrowed_html = html.find_all(class_="vrhdata")
-
     link_list = [json.loads(n_html["vrhm"])["pgurl"] for n_html in narrowed_html]
 
     random.shuffle(link_list)
@@ -94,6 +92,7 @@ def searchPorn(search, results=105, length=20):
         for link in linklist:
             stream = getstream(link)
             if stream:
+                log.warn({"link": link, "stream": stream})
                 yield stream
             else:
                 continue
@@ -112,7 +111,7 @@ def simple_get(url):
                 return resp.content
             return None
     except RequestException as err:
-        log.eror(err)
+        log.error(err)
         return None
 
 
@@ -120,7 +119,9 @@ def simple_get(url):
 def getstream(link):
     try:
         time.sleep(1)
-        vidurl = ydl.extract_info(link, download=False).get("url", None)
+        ydl_opts["referer"] = link
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            vidurl = ydl.extract_info(link, download=False).get("url", None)
         return vidurl
     except AttributeError:
         ...

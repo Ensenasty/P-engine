@@ -303,10 +303,9 @@ function make_search_link() {
 
 function load_search_link(vid_container) {
     built_search_link = make_search_link()
-    console.log(built_search_link)
     fetch(built_search_link)
         .then((response) => {return response.text()})
-        .then((data) => {console.log(data);vid_container.src = data;})
+        .then((data) => {vid_container.src = data;})
         .catch((error) => {console.error(error)});
 }
 
@@ -329,7 +328,7 @@ vids.forEach(function (vid, index) {
 // add GET values to url if not present, so it is clear to the user what can be changed
 var stateObj = {};
 function update_url(rows, cols, results, length, search) {
-    history.pushState(stateObj, "Porn Matrix",
+    history.pushState(stateObj, "Ensenasty Club Porn",
     "?rows=" + rows + "&cols=" + cols + "&results=" + results + "&length=" + length + "&search=" + search);
 }
 update_url(rows, cols, results, length, search);

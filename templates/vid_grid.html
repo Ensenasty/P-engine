@@ -8,18 +8,14 @@
         window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
-
           gtag('config', 'UA-96912056-7');
     </script>
-
-<title>P-engine Nasty Videos</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/solid.css" integrity="sha384-+0VIRx+yz1WBcCTXBkVQYIBVNEFH1eP6Zknm16roZCyeNg2maWEpk/l/KsyFKs7G" crossorigin="anonymous">
-<link rel="stylesheet" href="static/style.css">
-<meta name="viewport" content="width=device-width, initial-scale=1.0,  minimum-scale=1.0">
-<style>
-
-</style>
+    <title>P-engine Nasty Videos</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/solid.css" integrity="sha384-+0VIRx+yz1WBcCTXBkVQYIBVNEFH1eP6Zknm16roZCyeNg2maWEpk/l/KsyFKs7G" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/fontawesome.css" integrity="sha384-jLuaxTTBR42U2qJ/pm4JRouHkEDHkVqH0T1nyQXn1mZ7Snycpf6Rl25VBNthU4z0" crossorigin="anonymous">
+    <link rel="stylesheet" href="static/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,  minimum-scale=1.0">
 </head>
 <body>
     <div id="help">
@@ -27,25 +23,28 @@
 
     Prueba esta herramienta en tu cel o usando varios monitores.
 
-  Hotkeys:
-    F11 = pantalla completa
+    Hotkeys:
+        F11    = pantalla completa.
+        Enter  = busqueda.
+        +/-    = volumen.
 
-    m    = mute encendido/aoagado
-    h    = ayuda
-    c    = controles encendido/apagado
-    +/-  = vol
+        c    = Controles encendido/apagado.
+        h    = Ayuda.
+        m    = Mute encendido/apagado.
+        p    = Pausa / continuar.
+        r    = Cargar el resultado de la busquedaa
+               en todos los reproductores.
 
-    flechas
-    izquierda  = retroceder 30s
-    derecha    = avanzar 30s
-    abajo      = ir al principio del video
-    arriba     = ir al final del video
+    Flechas:
+        izquierda  = retroceder 30s.
+        derecha    = avanzar 30s.
+        abajo      = ir al principio del video.
+        arriba     = ir al final del video.
 
-    p = pausa / continuar
-
-    enter  = busqueda
-    r      = cargar el resultado de la busquedaa en todos los reproductores
-    1-9    = cargar el resultado de la busqueda solo en uno
+    Números:
+        Cargan el resultado de la busqueda en el reproductor:
+            1 = superior izquierdo.  2 = superior derecho.
+            3 = inferior izquierdo.  4 = inferior izquierdo.
         </pre>
     </div>
     <input type="text" id="search_box" size="20" placeholder="que buscas?">
@@ -71,9 +70,11 @@
         {% endfor %}
     </div>
 <script>
-    results = {{ results }};
-    length = {{ length }};
-    search = "{{ search }}";
+    const cols =2;
+    const rows =2;
+    const results = {{ results }};
+    const length = {{ length }};
+    var search = "{{ search }}";
 </script>
 <script src="/static/control.js"></script>
 </body>

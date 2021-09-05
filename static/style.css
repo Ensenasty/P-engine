@@ -83,7 +83,7 @@ button {
   width: 15vmin;
   height: 0.5vmin;
   border-radius: 0.5vmin;
-  background: #white;
+  background: white;
   outline: none;
   position: fixed;
   top: 1.6vmin;
@@ -105,7 +105,7 @@ button {
   width: 2vmin;
   height: 2vmin;
   border-radius: 50%;
-  background: #white;
+  background: white;
   cursor: pointer;
   box-shadow: -1px 1px black;
 }
