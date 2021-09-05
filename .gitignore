@@ -1,3 +1,6 @@
+nvenv
+settings.json
+.prettierrc
 .build
 .venv
 __pycache__

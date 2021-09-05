@@ -1,6 +1,17 @@
 from os import path
-from flask import Flask, send_from_directory, render_template, request
+import hashlib
+import hmac
+import base64
+from flask import (
+    Flask,
+    send_from_directory,
+    render_template,
+    request,
+    jsonify,
+    redirect,
+)
 
+from flask_login import LoginManager, UserMixin
 from generator import searchPorn
 
 app = Flask(__name__)
@@ -50,7 +61,6 @@ def search_query(query):
 
 
 if __name__ == "__main__":
-    import os
+    app.run(debug=False, host="0.0.0.0")
 
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
 #  vim: set ft=python sw=4 tw=0 fdm=manual et :

@@ -13,26 +13,30 @@ gcloud run deploy $(NAME) \
   --allow-unauthenticated
 endef
 
-PHONY: build init deploy run clean
+PHONY: build init deploy run rebuild clean localserve
 
 default:: build
 default:: deploy
 
 build: .build
 
-init: NAME=$(SERVICE)
-init: .build
-
 deploy: NAME=$(SERVICE)
 deploy: run
 
-run: deploy
+init: NAME=$(SERVICE)
+init: .build
+
+run:
+	$(DEPLOY_CMD)
 
 rebuild:: clean
 rebuild:: default
 
 clean:
 	rm -rf .build .init __pycache__
+
+localserve:
+	gunicorn --bind localhost:8888 --workers 1 --threads 8 --timeout 0 p-engine:app
 
 .build: $(ANYSRC)
 	gcloud builds submit --tag $(SRV_IMAGE)
@@ -41,13 +45,10 @@ clean:
 .init:
 	@$(DEPLOY_CMD) \
   --no-allow-unauthenticated \
-  --memory=512Mi \
+  --memory=512M \
   --no-use-http2 \
   --platform=managed \
   --project=$(PROJECT)
 	echo 1 > $@
-
-run:
-	$(DEPLOY_CMD)
 
 %:

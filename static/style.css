@@ -1,0 +1,111 @@
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+body {
+  background-color: #000000;
+}
+video {
+  position: absolute;
+  max-height: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  min-width: 100%;
+}
+.vid_container {
+  position: relative;
+  max-height: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  min-width: 100%;
+}
+#vid_grid {
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(2, auto);
+  place-items: center stretch;
+}
+#help {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 98;
+  background-color: lightgrey;
+  border-radius: 10px;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+#controls {
+  position: fixed;
+  top: 5px !important;
+  left: 5px !important;
+  z-index: 97;
+  display: table;
+}
+button {
+  font-size: 2.5vmin;
+  font-weight: bold;
+  min-width: 3vmin;
+  display: table-cell;
+  background-color: Transparent;
+  color: white;
+  text-shadow: -1px 1px black;
+  pointer-events: auto !important;
+}
+#main_buttons {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.fa-redo-alt {
+  font-size: 2vmin;
+  min-width: 2.5vmin;
+}
+#search_box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  font-size: 6vmin;
+  border: 2px solid black;
+  padding: 0.5vmin;
+  padding-left: 1vmin;
+  border-radius: 10px;
+  box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  display: none;
+}
+#volume {
+  -webkit-appearance: none;
+  width: 15vmin;
+  height: 0.5vmin;
+  border-radius: 0.5vmin;
+  background: white;
+  outline: none;
+  position: fixed;
+  top: 1.6vmin;
+  left: 4vmin;
+  z-index: 97;
+  box-shadow: -1px 1px black;
+}
+#volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 2vmin;
+  height: 2vmin;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: -1px 1px black;
+}
+#volume::-moz-range-thumb {
+  width: 2vmin;
+  height: 2vmin;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: -1px 1px black;
+}
