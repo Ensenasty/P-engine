@@ -1,3 +1,5 @@
+nvenv
+settings.json
 .prettierrc
 .build
 .venv
