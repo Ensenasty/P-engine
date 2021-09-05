@@ -7,9 +7,14 @@ PROJECT   = $(PROJ)
 REGION    = us-west1
 
 define DEPLOY_CMD
+@echo define BOT_TOKEN and SECRET_KEY in your environment
+@echo or this build will fail..
+test -n "$(BOT_TOKEN)"
+test -n "$(SECRET_KEY)"
 gcloud run deploy $(NAME) \
   --image $(SRV_IMAGE) \
   --region $(REGION) \
+  --set-env-vars=BOT_TOKEN="$(BOT_TOKEN)",SECRET_KEY="$(SECRET_KEY)" \
   --allow-unauthenticated
 endef
 
