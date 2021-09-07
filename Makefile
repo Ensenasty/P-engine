@@ -6,11 +6,15 @@ SERVICE   = p-engine
 PROJECT   = $(PROJ)
 REGION    = us-west1
 
-define DEPLOY_CMD
+define TESTENV
 @echo define BOT_TOKEN and SECRET_KEY in your environment
 @echo or this build will fail..
 test -n "$(BOT_TOKEN)"
 test -n "$(SECRET_KEY)"
+endef
+
+define DEPLOY_CMD
+$(TESTENV)
 gcloud run deploy $(NAME) \
   --image $(SRV_IMAGE) \
   --region $(REGION) \
@@ -41,6 +45,7 @@ clean:
 	rm -rf .build .init __pycache__
 
 localserve:
+	$(TESTENV)
 	gunicorn --bind localhost:8888 --workers 1 --threads 8 --timeout 0 p-engine:app
 
 .build: $(ANYSRC)
