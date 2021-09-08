@@ -7,8 +7,9 @@ PROJECT   = $(PROJ)
 REGION    = us-west1
 
 define TESTENV
-@echo define BOT_TOKEN and SECRET_KEY in your environment
+@echo define BOT_TOKEN, PROJ and SECRET_KEY in your environment
 @echo or this build will fail..
+test -n "$(PROJ)"
 test -n "$(BOT_TOKEN)"
 test -n "$(SECRET_KEY)"
 endef
