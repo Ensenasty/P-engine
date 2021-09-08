@@ -1,7 +1,8 @@
 from os import path
+import base64
+
 import hashlib
 import hmac
-import base64
 from flask import (
     Flask,
     send_from_directory,
@@ -11,19 +12,37 @@ from flask import (
     redirect,
 )
 
+from flask_login.utils import login_required
+from urllib.parse import urlparse, urljoin
+
 import logzero
-import config
 from logzero import logger as log
-from flask_login import LoginManager, UserMixin
-from generator import searchPorn
 
 logzero.json()
+
+import config
+from generator import searchPorn
+from userclass import User
 
 app = Flask(__name__)
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 app.config.from_object(config)
 app.secret_key = app.config["SECRET_KEY"]
+
+from flask_login import LoginManager
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "/login"
+login_manager.login_message = "Para ver esta página debes ser miembro de Ensenasty club"
+login_manager.login_message_category = "info"
+
+
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ("http", "https") and ref_url.netloc == test_url.netloc
 
 
 def string_generator(data_incoming):
@@ -37,7 +56,13 @@ def string_generator(data_incoming):
     return string_cat
 
 
-@app.route("/vidya")
+@app.route("/auth")
+def register_auth():
+    pass
+
+
+@app.route("/firehose")
+@login_required
 def main_page():
     cols = int(request.args.get("cols", default=2))
     rows = int(request.args.get("rows", default=2))
@@ -69,6 +94,7 @@ def favicon():
 
 
 @app.route("/search/<query>")
+@login_required
 def search_query(query):
     results = int(request.args.get("results", default=105))
     length = int(request.args.get("length", default=20))
@@ -81,7 +107,7 @@ def search_query(query):
     return app.response_class(stream(), mimetype="text/plain")
 
 
-@app.route("/login")
+@login_manager.request_loader
 def login():
     tg_data = {
         "id": request.args.get("id", None),
@@ -94,6 +120,7 @@ def login():
 
     log.debug(tg_data)
     log.debug(app.config["BOT_TOKEN"])
+    log.debug(app.config["SECRET_KEY"])
 
     data_check_string = string_generator(tg_data)
     secret_key = hashlib.sha256(app.config["BOT_TOKEN"].encode("utf-8")).digest()
@@ -103,11 +130,18 @@ def login():
         secret_key_bytes, data_check_string_bytes, hashlib.sha256
     ).hexdigest()
     if hmac_string == tg_data["hash"]:
-        return redirect("/dashboard")
+        return redirect("/vidya")
 
     return jsonify(
         {"hmac_string": hmac_string, "tg_hash": tg_data["hash"], "tg_data": tg_data}
     )
+
+
+# @app.route("/logout")
+# @login_required
+# def logout():
+#     User.logout()
+#     return redirect("/")
 
 
 if __name__ == "__main__":
