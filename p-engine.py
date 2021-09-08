@@ -55,6 +55,17 @@ def string_generator(data_incoming):
     string_cat = "\n".join(string_arr)
     return string_cat
 
+def is_valid(tg_data):
+    data_check_string = string_generator(tg_data)
+    secret_key = hashlib.sha256(app.config["BOT_TOKEN"].encode("utf-8")).digest()
+    secret_key_bytes = secret_key
+    data_check_string_bytes = bytes(data_check_string, "utf-8")
+    hmac_string = hmac.new(
+        secret_key_bytes, data_check_string_bytes, hashlib.sha256
+    ).hexdigest()
+    return hmac_string == tg_data["hash"]
+        
+
 
 @app.route("/auth")
 def register_auth():
@@ -108,7 +119,7 @@ def search_query(query):
 
 
 @login_manager.request_loader
-def login():
+def load_user_from_request(request):
     tg_data = {
         "id": request.args.get("id", None),
         "first_name": request.args.get("first_name", None),
@@ -116,25 +127,28 @@ def login():
         "username": request.args.get("username", None),
         "auth_date": request.args.get("auth_date", None),
         "hash": request.args.get("hash", None),
+        "photo_url": request.args.get("photo_url", None)
     }
 
     log.debug(tg_data)
     log.debug(app.config["BOT_TOKEN"])
     log.debug(app.config["SECRET_KEY"])
 
-    data_check_string = string_generator(tg_data)
-    secret_key = hashlib.sha256(app.config["BOT_TOKEN"].encode("utf-8")).digest()
-    secret_key_bytes = secret_key
-    data_check_string_bytes = bytes(data_check_string, "utf-8")
-    hmac_string = hmac.new(
-        secret_key_bytes, data_check_string_bytes, hashlib.sha256
-    ).hexdigest()
-    if hmac_string == tg_data["hash"]:
-        return redirect("/vidya")
+    if tg_data["id"]:
+        if is_valid(tg_data):
+            try:
+                user = User(tg_data)
+            except TypeError:
+                return None
+            return user 
+        else:
+            return None
+    else:
+        return None
 
-    return jsonify(
-        {"hmac_string": hmac_string, "tg_hash": tg_data["hash"], "tg_data": tg_data}
-    )
+    # return jsonify(
+    #     {"hmac_string": hmac_string, "tg_hash": tg_data["hash"], "tg_data": tg_data}
+    # )
 
 
 # @app.route("/logout")
