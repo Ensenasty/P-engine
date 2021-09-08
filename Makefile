@@ -1,10 +1,10 @@
 
 ANYSRC   != find . -type f | grep -v git | grep -v .rope
 FIRSTDEPLOY  = cat .init
-SRV_IMAGE = gcr.io/mezaops/$(SERVICE):latest
 SERVICE   = p-engine
 PROJECT   = $(PROJ)
 REGION    = us-west1
+SRV_IMAGE = gcr.io/$(PROJECT)/$(SERVICE):latest
 
 define TESTENV
 @echo define BOT_TOKEN, PROJ and SECRET_KEY in your environment
