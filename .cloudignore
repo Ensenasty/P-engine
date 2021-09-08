@@ -10,8 +10,6 @@ README.md
 .pytest_cache
 .theia
 .venv
-Dockerfile
 README.md
 __pycache__
-cloudbuild.yaml
 .ropeproject
