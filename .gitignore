@@ -1,7 +1,10 @@
-nvenv
-settings.json
-.prettierrc
+*.pyc
+*.pyd
+*.pyo
 .build
+.git
+.pytest_cache
+.theia
 .venv
 __pycache__
 .ropeproject
