@@ -34,7 +34,7 @@ from flask_login import LoginManager
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "/login"
+login_manager.login_view = "/"
 login_manager.login_message = "Para ver esta página debes ser miembro de Ensenasty club"
 login_manager.login_message_category = "info"
 
@@ -65,16 +65,13 @@ def is_valid(tg_data):
     ).hexdigest()
     return hmac_string == tg_data["hash"]
         
-
-
 @app.route("/auth")
 def register_auth():
-    pass
-
+    return redirect("/firehose")
 
 @app.route("/firehose")
 @login_required
-def main_page():
+def firehose(request):
     cols = int(request.args.get("cols", default=2))
     rows = int(request.args.get("rows", default=2))
     results = int(request.args.get("results", default=105))
@@ -130,26 +127,11 @@ def load_user_from_request(request):
         "photo_url": request.args.get("photo_url", None)
     }
 
-    log.debug(tg_data)
-    log.debug(app.config["BOT_TOKEN"])
-    log.debug(app.config["SECRET_KEY"])
-
-    if tg_data["id"]:
-        if is_valid(tg_data):
-            try:
-                user = User(tg_data)
-            except TypeError:
-                return None
-            return user 
-        else:
-            return None
+    if tg_data["id"] and is_valid(tg_data):
+        user = User(tg_data)
+        return user 
     else:
         return None
-
-    # return jsonify(
-    #     {"hmac_string": hmac_string, "tg_hash": tg_data["hash"], "tg_data": tg_data}
-    # )
-
 
 # @app.route("/logout")
 # @login_required
