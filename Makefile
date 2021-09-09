@@ -13,6 +13,10 @@ gcloud run deploy $(NAME) \
   --allow-unauthenticated
 endef
 
+ifndef PORT
+PORT=8888
+endif
+
 PHONY: build init deploy run rebuild clean localserve
 
 default:: build
@@ -36,7 +40,7 @@ clean:
 	rm -rf .build .init __pycache__
 
 localserve:
-	gunicorn --bind localhost:8888 --workers 1 --threads 8 --timeout 0 p-engine:app
+	gunicorn --bind localhost:$(PORT) --workers 1 --threads 8 --timeout 0 p-engine:app
 
 .build: $(ANYSRC)
 	gcloud builds submit --tag $(SRV_IMAGE)

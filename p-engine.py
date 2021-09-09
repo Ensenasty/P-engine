@@ -57,9 +57,7 @@ def search_query(query):
 
     #  [print(u) for u in urls]
 
-<<<<<<< HEAD
-    return app.response_class(stream(), mimetype="text/plain")
-=======
+
 @login_manager.request_loader
 def load_user_from_request(request):
     tg_data = {
@@ -69,21 +67,21 @@ def load_user_from_request(request):
         "username": request.args.get("username", None),
         "auth_date": request.args.get("auth_date", None),
         "hash": request.args.get("hash", None),
-        "photo_url": request.args.get("photo_url", None)
+        "photo_url": request.args.get("photo_url", None),
     }
 
     if tg_data["id"] and is_valid(tg_data):
         user = User(tg_data)
-        return user 
+        return user
     else:
         return None
+
 
 # @app.route("/logout")
 # @login_required
 # def logout():
 #     User.logout()
 #     return redirect("/")
->>>>>>> cdcfd68... Upgraded bootstrap
 
 
 if __name__ == "__main__":
