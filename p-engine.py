@@ -11,7 +11,6 @@ from flask import (
     redirect,
 )
 
-from flask_login import LoginManager, UserMixin
 from generator import searchPorn
 
 app = Flask(__name__)
@@ -56,25 +55,6 @@ def search_query(query):
         return next(urls)
 
     #  [print(u) for u in urls]
-
-
-@login_manager.request_loader
-def load_user_from_request(request):
-    tg_data = {
-        "id": request.args.get("id", None),
-        "first_name": request.args.get("first_name", None),
-        "last_name": request.args.get("last_name", None),
-        "username": request.args.get("username", None),
-        "auth_date": request.args.get("auth_date", None),
-        "hash": request.args.get("hash", None),
-        "photo_url": request.args.get("photo_url", None),
-    }
-
-    if tg_data["id"] and is_valid(tg_data):
-        user = User(tg_data)
-        return user
-    else:
-        return None
 
 
 # @app.route("/logout")
