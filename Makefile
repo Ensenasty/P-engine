@@ -1,7 +1,6 @@
 
-ANYSRC   != find . -type f | grep -v git | grep -v .rope
 FIRSTDEPLOY  = cat .init
-SRV_IMAGE = gcr.io/mezaops/$(SERVICE):latest
+SRV_IMAGE = gcr.io/$(PROJ)/$(SERVICE):latest
 SERVICE   = p-engine
 PROJECT   = $(PROJ)
 REGION    = us-west1
@@ -42,7 +41,7 @@ clean:
 localserve:
 	gunicorn --bind localhost:$(PORT) --workers 1 --threads 8 --timeout 0 p-engine:app
 
-.build: $(ANYSRC)
+.build:
 	gcloud builds submit --tag $(SRV_IMAGE)
 	touch $@
 

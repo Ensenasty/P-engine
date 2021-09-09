@@ -19,6 +19,11 @@ app.jinja_env.lstrip_blocks = True
 
 
 @app.route("/")
+def index():
+    return redirect("/firehose")
+
+
+@app.route("/firehose")
 def main_page():
     cols = int(request.args.get("cols", default=2))
     rows = int(request.args.get("rows", default=2))
@@ -54,14 +59,7 @@ def search_query(query):
     def stream():
         return next(urls)
 
-    #  [print(u) for u in urls]
-
-
-# @app.route("/logout")
-# @login_required
-# def logout():
-#     User.logout()
-#     return redirect("/")
+    return app.response_class(stream(), mimetype="text/plain")
 
 
 if __name__ == "__main__":
